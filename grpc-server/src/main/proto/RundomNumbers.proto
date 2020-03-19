@@ -1,0 +1,16 @@
+syntax = "proto3";
+option java_multiple_files = true;
+package com.grcpwebflux.server;
+
+message RandomNumber {
+    int32 value = 2;
+}
+
+message NumberBorders {
+    int32 minValue = 1;
+    int32 maxValue = 2;
+}
+
+service RandomNumberService {
+    rpc produce(stream NumberBorders) returns (stream RandomNumber);
+}

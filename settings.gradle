@@ -1,1 +1,3 @@
 rootProject.name = 'grcp-webflux'
+include 'grpc-server'
+
