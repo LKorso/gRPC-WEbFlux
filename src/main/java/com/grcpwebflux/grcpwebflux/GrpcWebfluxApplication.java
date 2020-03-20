@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class GrcpWebfluxApplication {
+public class GrpcWebfluxApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(GrcpWebfluxApplication.class, args);
+        SpringApplication.run(GrpcWebfluxApplication.class, args);
     }
 
 }

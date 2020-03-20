@@ -5,32 +5,23 @@ import com.grcpwebflux.server.RandomNumber;
 import com.grcpwebflux.server.RandomNumberServiceGrpc;
 import io.grpc.stub.StreamObserver;
 
+import java.time.Duration;
 import java.util.Random;
 
 public class RandomNumberService extends RandomNumberServiceGrpc.RandomNumberServiceImplBase {
 
-    private Random random = new Random();
-
     @Override
-    public StreamObserver<NumberBorders> produce(StreamObserver<RandomNumber> responseObserver) {
-        return new StreamObserver<>() {
-            @Override
-            public void onNext(NumberBorders borders) {
-                int randomNumber = random.nextInt(borders.getMaxValue() - borders.getMinValue() + 1) + borders.getMinValue();
-                RandomNumber result = RandomNumber.newBuilder().setValue(randomNumber).build();
-                responseObserver.onNext(result);
+    public void produce(NumberBorders borders, StreamObserver<RandomNumber> responseObserver) {
+        for (int number : new Random().ints(borders.getSize(), borders.getMinValue(), borders.getMaxValue()).toArray()) {
+            System.out.println("Generated number: " + number);
+            responseObserver.onNext(RandomNumber.newBuilder().setValue(number).build());
+            try {
+                Thread.sleep(Duration.ofSeconds(borders.getDelay()).toMillis());
+            } catch (InterruptedException e) {
+                System.out.println("Error while delaying number producing: " + e.getMessage());
             }
-
-            @Override
-            public void onError(Throwable t) {
-                System.out.println("Error in RandomNumberService : " + t.getMessage());
-            }
-
-            @Override
-            public void onCompleted() {
-                responseObserver.onCompleted();
-            }
-        };
+        }
+        System.out.println("" + borders.getSize() + " were generated");
     }
 
 }
